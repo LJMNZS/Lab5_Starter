@@ -10,6 +10,7 @@ function init() {
   var audio = document.querySelector('audio')
   var isPartyHorn = false;
   var validHornSelected = false;
+  var isMuted = false;
   var slider = document.getElementById('volume');
   var audioImg = document.querySelectorAll('img')[1];
   var selectHorn = document.querySelectorAll('option')[0]
@@ -43,20 +44,24 @@ function init() {
 
   slider.addEventListener( 'input', function() {
     if (slider.value == 0) {
+      isMuted = true;
       audioImg.setAttribute('src', './assets/icons/volume-level-0.svg');
       audio.volume = slider.value;
     }
     else if (slider.value > 0 && slider.value < 33) {
       audioImg.setAttribute('src', './assets/icons/volume-level-1.svg');
       audio.volume = slider.value / 100;
+      isMuted = false;
     }
     else if (slider.value >= 33 && slider.value < 67) {
       audioImg.setAttribute('src', './assets/icons/volume-level-2.svg');
       audio.volume = slider.value / 100;
+      isMuted = false;
     }
     else {
       audioImg.setAttribute('src', './assets/icons/volume-level-3.svg');
       audio.volume = slider.value / 100;
+      isMuted = false;
     }
   });
 
@@ -64,7 +69,7 @@ function init() {
   button.addEventListener('click', event => {
     if (validHornSelected) {
       audio.play();
-      if (isPartyHorn) {
+      if (isPartyHorn && !isMuted) {
         jsConfetti.addConfetti();
         isPartyHorn = false;
       }
